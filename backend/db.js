@@ -1,26 +1,22 @@
-import mongoose from "mongoose";
-import { string } from "zod";
+require("dotenv").config();
+const mongoose = require("mongoose");
 
-const URL =
-  "mongodb+srv://amanofficial0108:XyT9TCZ53hXfMjrN@cluster0.cdyu3.mongodb.net/cluster0";
+const URL = process.env.MONGODB_URL;
 
 mongoose
-  .connect(URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(URL, {})
   .then(() => console.log("mongodb connected "))
   .catch(() => console.log("mongodb not connected "));
 
 const userSchema = new mongoose.Schema({
-  username: string,
-  password: string,
-  firstname: string,
-  lastname: string,
+  email: String,
+  password: String,
+  firstname: String,
+  lastname: String,
 });
 
-const user = mongoose.model("user", userSchema);
+const User = mongoose.model("user", userSchema);
 
 module.exports = {
-  user,
+  User,
 };

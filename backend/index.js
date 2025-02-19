@@ -4,9 +4,8 @@ const port = 3000;
 
 const app = express();
 
-app.use("/api/v1", mainRoute);
-
 app.use(express.json());
+app.use("/api/v1", mainRoute);
 
 app.listen(port, () => {
   console.log(`port listening on ${port}`);
