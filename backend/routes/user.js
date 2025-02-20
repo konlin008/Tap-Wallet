@@ -1,6 +1,6 @@
 const express = require("express");
 const zod = require("zod");
-const { User } = require("../db");
+const { User, Account } = require("../db");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
 const bcrypt = require("bcrypt");
@@ -25,10 +25,10 @@ router.post("/signup", async (req, res) => {
       msg: "Invalid Input",
     });
   }
-  const searachUser = await User.findOne({
+  const existingUser = await User.findOne({
     email: body.email,
   });
-  if (searachUser) {
+  if (existingUser) {
     return res.status(411).json({
       msg: "Email already taken",
     });
@@ -41,6 +41,21 @@ router.post("/signup", async (req, res) => {
     firstname: body.firstname,
     lastname: body.lastname,
   });
+
+  const userId = newUser._id;
+
+  try {
+    Account.create({
+      userId: userId,
+      balance: Math.floor(1 + Math.random() * 10000),
+    });
+  } catch (err) {
+    res.status(403).json({
+      msg: "error while adding balance",
+      err,
+    });
+  }
+
   const token = jwt.sign(
     {
       userId: newUser._id,
@@ -85,4 +100,35 @@ router.put("/", authMiddleware, async (req, res) => {
     msg: "Data Update Successfully",
   });
 });
+
+router.get("/bulk", async (req, res) => {
+  try {
+    const filter = req.query.filter || "";
+
+    const searchedUser = await User.find({
+      $or: [
+        { firstname: { $regex: filter, $options: "i" } },
+        { lastname: { $regex: filter, $options: "i" } },
+      ],
+    });
+
+    if (searchedUser.length === 0) {
+      return res.status(404).json({ msg: "No User Found" });
+    }
+
+    res.status(200).json({
+      users: searchedUser.map(({ email, firstname, lastname, _id }) => ({
+        email,
+        firstname,
+        lastname,
+        _id,
+      })),
+    });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ msg: "Internal Server Error", error: error.message });
+  }
+});
+
 module.exports = router;
