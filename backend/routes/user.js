@@ -22,6 +22,7 @@ router.post("/signup", async (req, res) => {
 
   if (!success) {
     return res.status(411).json({
+      
       msg: "Invalid Input",
     });
   }
@@ -68,6 +69,35 @@ router.post("/signup", async (req, res) => {
     token: token,
   });
 });
+
+router.post("/signin", async (req, res) => {
+  const body = req.body;
+
+  const user = await User.findOne({
+    email: body.email,
+  });
+  if (!user) {
+    return res.status(400).json({
+      msg: "Invalid Email Id ",
+    });
+  }
+  const checkedPassword = await bcrypt.compare(body.password, user.password);
+  if (!checkedPassword) {
+    return res.status(400).json({
+      msg: "Wrong Password",
+    });
+  }
+  const token = jwt.sign(
+    {
+      userId: user._id,
+    },
+    JWT_SECRET
+  );
+  return res.status(200).json({
+    msg: "Sign In successfully",
+    token: token,
+  });
+});
 const { authMiddleware } = require("../authMiddleware");
 
 const updatedUserData = zod.object({
@@ -76,7 +106,7 @@ const updatedUserData = zod.object({
   lastname: zod.string().optional(),
 });
 
-router.put("/", authMiddleware, async (req, res) => {
+router.put("/updateUserData", authMiddleware, async (req, res) => {
   const updatedData = req.body;
   const { success } = updatedUserData.safeParse(updatedData);
   if (!success) {
@@ -101,11 +131,13 @@ router.put("/", authMiddleware, async (req, res) => {
   });
 });
 
-router.get("/bulk", async (req, res) => {
+router.get("/bulk", authMiddleware, async (req, res) => {
   try {
     const filter = req.query.filter || "";
+    const userId = req.userId;
 
     const searchedUser = await User.find({
+      _id: { $ne: userId },
       $or: [
         { firstname: { $regex: filter, $options: "i" } },
         { lastname: { $regex: filter, $options: "i" } },

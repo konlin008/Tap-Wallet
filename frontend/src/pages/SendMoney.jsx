@@ -1,7 +1,8 @@
-import { useSearchParams } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import Heading from "../components/Heading"
 import { useState } from "react"
 import axios from "axios"
+import { toast } from "react-toastify"
 
 
 
@@ -10,6 +11,7 @@ const SendMoney = () => {
     const id = searchParms.get('id')
     const name = searchParms.get('name')
     const [amount, setAmount] = useState()
+    const navigate = useNavigate()
 
     return (
         <div className="bg-slate-200 w-screen h-screen flex items-center justify-center ">
@@ -45,9 +47,10 @@ const SendMoney = () => {
                                 }, {
                                 headers: {
                                     'Authorization': `Bearer ${localStorage.getItem('token')}`
-                                }   
+                                }
                             })
-                            console.log(res.data);
+                            toast(res.data.msg)
+                            navigate('/dashBoard')
                         }} className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Send Money</button>
                 </div>
 

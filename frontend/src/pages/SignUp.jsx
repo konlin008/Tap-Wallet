@@ -6,6 +6,7 @@ import BottomWarning from "../components/BottomWarning";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
     const [firstname, setFirstname] = useState("");
@@ -47,15 +48,20 @@ const SignUp = () => {
                     }}
                 />
                 <Button label={"Submit"} onClick={async () => {
-                    const res = await axios.post('http://localhost:3000/api/v1/user/signup', {
-                        email,
-                        firstname,
-                        lastname,
-                        password,
-                    })
-                    localStorage.setItem('token', res.data.token)
-                    if (res.data.token) {
-                        navigate('/dashBoard')
+                    try {
+                        const res = await axios.post('http://localhost:3000/api/v1/user/signup', {
+                            email,
+                            firstname,
+                            lastname,
+                            password,
+                        })
+                        localStorage.setItem('token', res.data.token)
+                        if (res.data.token) {
+                            toast(res.data.msg)
+                            navigate('/dashBoard')
+                        }
+                    } catch (err) {
+                        toast.error(err.response?.data?.msg || "Something went wrong. Please try again.");
                     }
                 }} />
                 <BottomWarning

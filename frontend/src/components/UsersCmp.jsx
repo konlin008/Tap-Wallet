@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 
 const UsersCmp = ({ onChange, searchedResponce }) => {
     const userData = searchedResponce
-    console.log(userData);
     const navigate = useNavigate()
     return (
         <div className='max-w-screen-xl flex flex-col mx-auto p-4 t text-2xl'>
@@ -22,26 +21,25 @@ const UsersCmp = ({ onChange, searchedResponce }) => {
 
             {userData.map(user => {
                 return (
-                    <>
-                        <div key={user._id} className="  mt-[50px]">
-                            <div className="flex items-center justify-between   py-4">
-                                <div className="flex items-center  ">
+                    <div key={user._id} className="  mt-[50px]">
+                        <div className="flex items-center justify-between   py-4">
+                            <div className="flex items-center  ">
 
-                                    <div className="rounded-full h-10 w-10 bg-slate-200 flex justify-center mt-1 mr-2">
-                                        <div className="flex flex-col justify-center h-full text-xl">
-                                            {user.firstname.charAt(0).toUpperCase()}
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-col justify-center h-full mr-4">
-                                        {user.firstname} {user.lastname}
+                                <div className="rounded-full h-10 w-10 bg-slate-200 flex justify-center mt-1 mr-2">
+                                    <div className="flex flex-col justify-center h-full text-xl">
+                                        {user.firstname.charAt(0).toUpperCase()}
                                     </div>
                                 </div>
-                                <button onClick={() => {
-                                    navigate(`/sendMoney?id=${user._id}&name=${user.firstname}`)
-                                }} type="button" className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5   dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Send Money</button>
+                                <div className="flex flex-col justify-center h-full mr-4">
+                                    {user.firstname} {user.lastname}
+                                </div>
                             </div>
+                            <button onClick={() => {
+                                navigate(`/sendMoney?id=${user._id}&name=${user.firstname}`)
+                            }} type="button" className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5   dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Send Money</button>
                         </div>
-                    </>
+                    </div>
+
                 )
 
             })}

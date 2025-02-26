@@ -1,6 +1,10 @@
+import { useNavigate } from "react-router-dom";
+import { Button } from "./Button"
+import { toast } from "react-toastify";
 
 
 const AppBar = () => {
+    const navigate = useNavigate()
     return (
         <>
             <nav className="bg-white border-gray-200 border-b-2">
@@ -19,13 +23,13 @@ const AppBar = () => {
                         </span>
                     </a>
                     <div className="flex items-center">
-                        <div className="flex flex-col justify-center h-full mr-4">
-                            Welcome
-                        </div>
-                        <div className="rounded-full h-12 w-12 bg-slate-200 flex justify-center mt-1 mr-2">
-                            <div className="flex flex-col justify-center h-full text-xl">
-                                U
-                            </div>
+                        <div className="flex items-center">
+                            <Button label={'Logout'} onClick={() => {
+                                localStorage.clear();
+                                toast('Logout')
+                                navigate('/signIn')
+
+                            }} />
                         </div>
                     </div>
                 </div>
