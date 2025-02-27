@@ -45,6 +45,7 @@ export const DashBoard = () => {
         <>
             <AppBar />
             <BalanceCmp balance={balance} />
+
             <UsersCmp onChange={e => {
                 setfilter(e.target.value)
             }} searchedResponce={searchedResponce} />

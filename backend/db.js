@@ -27,10 +27,24 @@ const accountSchema = new mongoose.Schema({
   },
 });
 
+const pinSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  pin: {
+    type: Number,
+    required: true,
+  },
+});
+
 const User = mongoose.model("user", userSchema);
 const Account = mongoose.model("Account", accountSchema);
+const Pin = mongoose.model("Pin", pinSchema);
 
 module.exports = {
   User,
   Account,
+  Pin,
 };
