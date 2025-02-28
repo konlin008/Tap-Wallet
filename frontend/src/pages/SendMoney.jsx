@@ -13,6 +13,39 @@ const SendMoney = () => {
     const [amount, setAmount] = useState()
     const navigate = useNavigate()
 
+    async function checkPin() {
+        const pin = prompt("Enter Your Four Digit Pin");
+        if (!pin || pin.length !== 4 || isNaN(pin)) {
+            toast.error("Please enter a valid 4-digit PIN.");
+            return false;
+        }
+
+        console.log("🔹 Sending PIN:", pin);
+
+        try {
+            const res = await axios.post(
+                "http://localhost:3000/api/v1/pin/matchPin",
+                { pin: pin.trim() },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+
+            toast.success(res.data.msg);
+            return true;
+        } catch (error) {
+            if (error.response && error.response.data?.msg === "Wrong Pin") {
+                toast.error(error.response.data.msg);
+                return false;
+            }
+            toast.error(error.response?.data?.msg || "Something went wrong");
+            return false;
+        }
+    }
+
     return (
         <div className="bg-slate-200 w-screen h-screen flex items-center justify-center ">
             <div className="h-[50vh] w-[25vw] bg-white rounded-[5px] p-6">
@@ -40,17 +73,23 @@ const SendMoney = () => {
                 <div className="py-[10px] flex justify-end mt-[20px] " >
                     <button type="button"
                         onClick={async () => {
-                            const res = await axios.post('http://localhost:3000/api/v1/account/transfer',
-                                {
-                                    amount: amount,
-                                    to: id
-                                }, {
-                                headers: {
-                                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                                }
-                            })
-                            toast(res.data.msg)
-                            navigate('/dashBoard')
+                            const pinResponse = await checkPin()
+                            if (pinResponse === false) {
+                                return
+                            }
+                            else {
+                                const res = await axios.post('http://localhost:3000/api/v1/account/transfer',
+                                    {
+                                        amount: amount,
+                                        to: id
+                                    }, {
+                                    headers: {
+                                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                    }
+                                })
+                                toast.success(res.data.msg)
+                                navigate('/dashBoard')
+                            }
                         }} className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Send Money</button>
                 </div>
 

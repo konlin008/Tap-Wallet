@@ -26,7 +26,7 @@ const AppBar = () => {
                         <div className="flex items-center">
                             <Button label={'Logout'} onClick={() => {
                                 localStorage.clear();
-                                toast('Logout')
+                                toast.success('Logout Successfully')
                                 navigate('/signIn')
 
                             }} />

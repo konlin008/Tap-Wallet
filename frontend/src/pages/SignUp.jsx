@@ -57,7 +57,7 @@ const SignUp = () => {
                         })
                         localStorage.setItem('token', res.data.token)
                         if (res.data.token) {
-                            toast(res.data.msg)
+                            toast.success(res.data.msg)
                             navigate('/dashBoard')
                         }
                     } catch (err) {

@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { Button } from "../components/Button";
 import Heading from "../components/Heading";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 
 
 const PinGenerate = () => {
     const [firstPin, setFirstPin] = useState()
     const [rePin, setRePin] = useState()
+    const nav = useNavigate()
     return (
         <div className="bg-slate-200 w-screen h-screen flex items-center justify-center">
             <div className="h-[60vh] w-[20vw] bg-white rounded-[5px] p-6">
@@ -48,9 +52,31 @@ const PinGenerate = () => {
                     />
                 </div>
 
-                <Button label={'Set Pin'} onClick={() => {
-                    console.log(firstPin);
-                    console.log(rePin);
+                <Button label={'Set Pin'} onClick={async () => {
+                    if (firstPin === rePin) {
+                        const originalPin = String(firstPin)
+                        if (originalPin.length != 4) {
+                            toast.error('Pin Should Be 4 Digit')
+                            return
+                        }
+                        const res = await axios.post('http://localhost:3000/api/v1/pin/setPin', {
+                            pin: originalPin
+                        },
+
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                }
+                            },
+                        )
+                        toast.success(res.data.msg);
+                        nav('/dashBoard')
+                    }
+                    else {
+                        toast.error('Rentered Pin doesn\'t match')
+                    }
+
+
                 }} />
             </div>
         </div>
