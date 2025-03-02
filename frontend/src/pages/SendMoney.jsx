@@ -24,7 +24,7 @@ const SendMoney = () => {
 
         try {
             const res = await axios.post(
-                "http://localhost:3000/api/v1/pin/matchPin",
+                `${import.meta.env.VITE_API_BASE_URL}pin/matchPin`,
                 { pin: pin.trim() },
                 {
                     headers: {
@@ -78,7 +78,7 @@ const SendMoney = () => {
                                 return
                             }
                             else {
-                                const res = await axios.post('http://localhost:3000/api/v1/account/transfer',
+                                const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}account/transfer`,
                                     {
                                         amount: amount,
                                         to: id

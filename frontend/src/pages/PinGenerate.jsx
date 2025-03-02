@@ -59,7 +59,7 @@ const PinGenerate = () => {
                             toast.error('Pin Should Be 4 Digit')
                             return
                         }
-                        const res = await axios.post('http://localhost:3000/api/v1/pin/setPin', {
+                        const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}pin/setPin`, {
                             pin: originalPin
                         },
 

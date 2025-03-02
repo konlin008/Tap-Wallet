@@ -33,7 +33,7 @@ export const SignIn = () => {
                 />
                 <Button label={"Submit"} onClick={async () => {
                     try {
-                        const res = await axios.post('http://localhost:3000/api/v1/user/signin', {
+                        const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}user/signin`, {
                             email,
                             password,
                         })
@@ -49,7 +49,7 @@ export const SignIn = () => {
                 <BottomWarning
                     label={"Don't have a account? "}
                     buttonText={"Sign up"}
-                    to={"/signUp"}
+                    to={"/"}
                 />
             </div>
         </div>

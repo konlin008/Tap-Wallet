@@ -10,7 +10,7 @@ export const DashBoard = () => {
     const [balance, setBalance] = useState()
     useEffect(() => {
         const fetchedData = async () => {
-            const res = await axios.get(`http://localhost:3000/api/v1/user/bulk?filter=${filter}`, {
+            const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}user/bulk?filter=${filter}`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -28,7 +28,7 @@ export const DashBoard = () => {
 
     useEffect(() => {
         const fetchedData = async () => {
-            const res = await axios.get(`http://localhost:3000/api/v1/account/balance`, {
+            const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}account/balance`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }

@@ -10,17 +10,17 @@ const BalanceCmp = ({ balance }) => {
     useEffect(() => {
         const hasPin = async () => {
             try {
-                const response = await axios.get("http://localhost:3000/api/v1/pin/isPinSet", {
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}pin/isPinSet`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
                         "Content-Type": "application/json",
                     },
                 });
 
-                setRes(response.data); 
+                setRes(response.data);
             } catch (error) {
                 console.error("Error fetching PIN status:", error);
-                setRes(false); 
+                setRes(false);
             }
         };
         hasPin();
@@ -31,7 +31,7 @@ const BalanceCmp = ({ balance }) => {
             <div>
                 <b>Your Balance</b>: {balance}
             </div>
-            {res === false && ( 
+            {res === false && (
                 <Button label={"Generate Pin"} onClick={() => navigate("/pinGenerate")} />
             )}
         </div>
