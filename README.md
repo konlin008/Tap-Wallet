@@ -2,7 +2,7 @@
 
 Tap Wallet is a payment application that allows users to register, set a secure PIN, and transfer dummy money to other users. It is built with a **React** frontend and a **Node.js, Express, and MongoDB** backend.
 
-[Live Demo](https://tap-wallet.vercel.app/add) – Check out the live version of Tap Wallet!
+[Live Demo](https://tap-wallet.vercel.app/) – Check out the live version of Tap Wallet!
 
 ## Features
 
